@@ -1,10 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import userRouter from './routes/users';
 import teamRouter from './routes/teams';
 import activityRouter from './routes/activities';
 import workoutRouter from './routes/workouts';
 import leaderboardRouter from './routes/leaderboard';
+import { connectDatabase, MONGO_URL } from './config/database';
 
 const app = express();
 app.use(express.json());
@@ -23,11 +23,9 @@ const apiBaseUrl = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
   : 'http://localhost:8000';
 
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/octofit_db';
 const PORT = 8000;
 
-mongoose
-  .connect(MONGO_URL)
+connectDatabase()
   .then(() => console.log('Connected to MongoDB', MONGO_URL))
   .catch((err) => console.error('MongoDB connection error', err));
 

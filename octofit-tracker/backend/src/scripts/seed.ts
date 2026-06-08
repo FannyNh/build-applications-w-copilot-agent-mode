@@ -1,17 +1,15 @@
-import mongoose from 'mongoose';
 import User from '../models/User';
 import Team from '../models/Team';
 import Activity from '../models/Activity';
 import Workout from '../models/Workout';
 import Leaderboard from '../models/Leaderboard';
-
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/octofit_db';
+import { connectDatabase, disconnectDatabase, MONGO_URL } from '../config/database';
 
 const log = console.log;
 
 async function seed() {
   log('Seed the octofit_db database with test data');
-  await mongoose.connect(MONGO_URL);
+  await connectDatabase();
   log(`Connected to MongoDB at ${MONGO_URL}`);
 
   await Promise.all([
@@ -106,7 +104,7 @@ async function seed() {
   await Leaderboard.create(leaderboardEntries);
 
   log(`Created ${users.length} users, ${teams.length} teams, ${workouts.length} workouts, ${activities.length} activities, and ${leaderboardEntries.length} leaderboard entries.`);
-  await mongoose.disconnect();
+  await disconnectDatabase();
   log('Seed complete.');
 }
 
