@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 
+// Codespaces API example: https://<VITE_CODESPACE_NAME>-8000.app.github.dev/api/workouts
+const codespaceWorkoutsEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts`
+  : null;
+
 function normalizeResponse(data) {
   if (Array.isArray(data)) return data;
   if (data?.data && Array.isArray(data.data)) return data.data;
@@ -14,7 +19,8 @@ export default function Workouts({ apiBaseUrl }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${apiBaseUrl}/workouts`)
+    const endpoint = codespaceWorkoutsEndpoint || `${apiBaseUrl}/workouts`;
+    fetch(endpoint)
       .then((res) => res.json())
       .then((data) => setWorkouts(normalizeResponse(data)))
       .catch((err) => setError(err.message || 'Failed to load workouts'))

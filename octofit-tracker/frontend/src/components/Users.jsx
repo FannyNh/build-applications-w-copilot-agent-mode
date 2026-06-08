@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 
+// Codespaces API example: https://<VITE_CODESPACE_NAME>-8000.app.github.dev/api/users
+const codespaceUsersEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users`
+  : null;
+
 function normalizeResponse(data) {
   if (Array.isArray(data)) return data;
   if (data?.data && Array.isArray(data.data)) return data.data;
@@ -14,7 +19,8 @@ export default function Users({ apiBaseUrl }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${apiBaseUrl}/users`)
+    const endpoint = codespaceUsersEndpoint || `${apiBaseUrl}/users`;
+    fetch(endpoint)
       .then((res) => res.json())
       .then((data) => setUsers(normalizeResponse(data)))
       .catch((err) => setError(err.message || 'Failed to load users'))

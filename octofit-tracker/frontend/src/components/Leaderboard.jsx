@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 
+// Codespaces API example: https://<VITE_CODESPACE_NAME>-8000.app.github.dev/api/leaderboard
+const codespaceLeaderboardEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard`
+  : null;
+
 function normalizeResponse(data) {
   if (Array.isArray(data)) return data;
   if (data?.data && Array.isArray(data.data)) return data.data;
@@ -14,7 +19,8 @@ export default function Leaderboard({ apiBaseUrl }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${apiBaseUrl}/leaderboard`)
+    const endpoint = codespaceLeaderboardEndpoint || `${apiBaseUrl}/leaderboard`;
+    fetch(endpoint)
       .then((res) => res.json())
       .then((data) => setEntries(normalizeResponse(data)))
       .catch((err) => setError(err.message || 'Failed to load leaderboard'))
