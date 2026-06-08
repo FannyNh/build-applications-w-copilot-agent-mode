@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "bootstrap": "^5.3.8",
     "react": "^19",
     "react-dom": "^19",
+    "bootstrap": "^5.3.8",
     "react-router-dom": "^7.17.0"
   },
   "devDependencies": {
